@@ -1,0 +1,62 @@
+{
+  "trovao": {
+    "file": "u_y48p56njcj-trovao-269392.mp3",
+    "desc": "Efeito sonoro de trovão",
+    "license": "Pixabay Content License",
+    "source": "https://pixabay.com/da/sound-effects/natur-trov%C3%A3o-269392/"
+  },
+  "splash": {
+    "file": "freesound_community-splash-by-blaukreuz-6261.mp3",
+    "desc": "Efeito sonoro de splash de água",
+    "license": "Pixabay Content License",
+    "source": "https://pixabay.com/da/sound-effects/water-splash-6261/"
+  },
+  "luz": {
+    "file": "freesound_community-fx-light-90387.mp3",
+    "desc": "Efeito sonoro de transição mágica FX light",
+    "license": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/musical-fx-light-90387/"
+  },
+  "agua": {
+    "file": "mightuser-gentle-ocean-waves-3-300839.mp3",
+    "desc": "Efeito sonoro de de ondas suaves do oceano",
+    "license": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/gentle-ocean-waves-3-300839/"
+  },
+  "passaros": {
+    "file": "freesound_community-birds-chirping-ambiance-26052.mp3",
+    "desc": "Efeito sonoro de pássaros cantando",
+    "license": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/birds-chirping-ambiance-26052/"
+  },
+  "leao": {
+    "file": "dffdv-lion-roars-with-growls-and-inhales-195839.mp3",
+    "desc": "Efeito sonoro de rugido de leão",
+    "license": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/lion-roars-with-growls-and-inhales-195839/"
+  },
+  "elefante": {
+    "file": "sondangsirait419-gajah-220044.mp3",
+    "desc": "Efeito sonoro de elefante",
+    "license": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/elephant-trumpet-220044/"
+  },
+  "cavalo": {
+    "file": "dragon-studio-horse-neigh-515279.mp3",
+    "desc": "Efeito sonoro de cavalo relinchando",
+    "license": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/horse-neigh-515279/"
+  },
+  "vilao": {
+    "file": "dragon-studio-evil-laughing-423669.mp3",
+    "desc": "Efeito sonoro de risada de vilão",
+    "license": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/evil-laughing-423669/"
+  },
+  "vazio": {
+    "file": "dragon-studio-wind-gust-386158.mp3",
+    "desc": "Efeito sonoro de espaço vazio",
+    "license": "Pixabay Content License",
+    "source": "https://pixabay.com/sound-effects/wind-gust-386158/"
+  }
+}
