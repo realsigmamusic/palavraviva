@@ -133,7 +133,7 @@ async function renderCatalog() {
   const head = `
     <div class="page-head">
       <h1>Histórias</h1>
-      <a class="btn primary" href="#/criar">Criar minha história</a>
+      <a class="btn primary" href="#/criar">✨ Criar minha história</a>
     </div>`;
 
   const list = valid
@@ -227,9 +227,9 @@ function renderUserStory(id) {
     body: story.body || '',
     actionsHtml: `
       <div class="ed-actions">
-        <a class="btn primary" href="#/editar/${story.id}">Editar</a>
-        <button type="button" class="btn" id="btn-export">Exportar .md</button>
-        <button type="button" class="btn danger" id="btn-delete">Excluir</button>
+        <a class="btn primary" href="#/editar/${story.id}">✏️ Editar</a>
+        <button type="button" class="btn" id="btn-export">⬇ Exportar .md</button>
+        <button type="button" class="btn danger" id="btn-delete">🗑 Excluir</button>
       </div>`,
   });
 

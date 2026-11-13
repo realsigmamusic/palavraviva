@@ -98,7 +98,7 @@ function downloadStoryMarkdown(story) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-function showToast(message) {
+function showToast(message, ms = 3200) {
   const old = document.querySelector('.toast');
   if (old) old.remove();
   const el = document.createElement('div');
@@ -106,5 +106,5 @@ function showToast(message) {
   el.setAttribute('role', 'status');
   el.textContent = message;
   document.body.appendChild(el);
-  setTimeout(() => el.remove(), 3200);
+  setTimeout(() => el.remove(), ms);
 }
