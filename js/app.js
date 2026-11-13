@@ -8,6 +8,9 @@ const state = {
 
 const app = document.getElementById('app');
 
+// função de limpeza da tela atual (o editor usa para salvar e remover listeners)
+let currentCleanup = null;
+
 /* ---------- utilities ---------- */
 
 function escapeHtml(text) {
@@ -127,10 +130,11 @@ async function renderCatalog() {
   );
 
   const valid = items.filter(Boolean);
-  if (valid.length === 0) {
-    app.innerHTML = '<h1>Histórias</h1><p class="error">Nenhuma história disponível.</p>';
-    return;
-  }
+  const head = `
+    <div class="page-head">
+      <h1>Histórias</h1>
+      <a class="btn primary" href="#/criar">Criar minha história</a>
+    </div>`;
 
   const list = valid
     .map(({ slug, meta }) => {
@@ -153,8 +157,49 @@ async function renderCatalog() {
     })
     .join('');
 
-  app.innerHTML = `<h1>Histórias</h1><ul class="catalog">${list}</ul>`;
+  const builtIn = valid.length
+    ? `<ul class="catalog">${list}</ul>`
+    : '<p class="error">Nenhuma história disponível.</p>';
+
+  const mine = userStories.list().sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+  const mineHtml = mine.length
+    ? `<h2 class="section-title">Minhas histórias</h2>
+       <ul class="catalog">${mine
+         .map((s) => {
+           const n = countSoundWords(s.body);
+           const info = n === 1 ? '1 palavra sonorizada' : `${n} palavras sonorizadas`;
+           return `
+            <li>
+              <a class="card" href="#/minhas/${s.id}">
+                <div class="cover cover-emoji" aria-hidden="true">📖</div>
+                <div>
+                  <h2>${escapeHtml(s.title || 'Sem título')}</h2>
+                  <p>${info}</p>
+                  <span class="age-badge">Criada por você</span>
+                </div>
+              </a>
+            </li>`;
+         })
+         .join('')}</ul>`
+    : '';
+
+  app.innerHTML = head + builtIn + mineHtml;
   attachCoverFallback(app);
+}
+
+function mountReader({ title, body, actionsHtml = '' }) {
+  document.title = `${title} · Histórias Bíblicas`;
+  app.innerHTML = `
+    <article class="reader">
+      <a class="back" href="#/">← Voltar</a>
+      <h1>${escapeHtml(title)}</h1>
+      <div class="story-body">${renderStoryBody(body)}</div>
+      ${actionsHtml}
+    </article>`;
+
+  app.querySelectorAll('.sound-word').forEach((button) => {
+    button.addEventListener('click', () => playSound(button.dataset.soundId));
+  });
 }
 
 async function renderStory(slug) {
@@ -162,28 +207,48 @@ async function renderStory(slug) {
   try {
     const text = await fetchText(`stories/${slug}/index.md`);
     const { meta, body } = parseFrontMatter(text);
-    const title = escapeHtml(meta.title || slug);
-    document.title = `${title} · Histórias Bíblicas`;
-
-    app.innerHTML = `
-      <article class="reader">
-        <a class="back" href="#/">← Voltar</a>
-        <h1>${title}</h1>
-        <div class="story-body">${renderStoryBody(body)}</div>
-      </article>`;
-
-    app.querySelectorAll('.sound-word').forEach((button) => {
-      button.addEventListener('click', () => playSound(button.dataset.soundId));
-    });
+    mountReader({ title: meta.title || slug, body });
   } catch (err) {
     console.error(`Failed to load story "${slug}":`, err);
     app.innerHTML = '<p class="error">Não foi possível carregar a história.</p>';
   }
 }
 
+function renderUserStory(id) {
+  const story = userStories.get(id);
+  if (!story) {
+    app.innerHTML =
+      '<p class="error">História não encontrada neste navegador.</p><a class="back" href="#/">← Voltar</a>';
+    return;
+  }
+
+  mountReader({
+    title: story.title || 'Sem título',
+    body: story.body || '',
+    actionsHtml: `
+      <div class="ed-actions">
+        <a class="btn primary" href="#/editar/${story.id}">Editar</a>
+        <button type="button" class="btn" id="btn-export">Exportar .md</button>
+        <button type="button" class="btn danger" id="btn-delete">Excluir</button>
+      </div>`,
+  });
+
+  document.getElementById('btn-export').addEventListener('click', () => downloadStoryMarkdown(story));
+  document.getElementById('btn-delete').addEventListener('click', () => {
+    if (!confirm('Excluir esta história? Essa ação não pode ser desfeita.')) return;
+    userStories.remove(story.id);
+    location.hash = '#/';
+  });
+}
+
 /* ---------- routing ---------- */
 
 async function render() {
+  if (currentCleanup) {
+    currentCleanup();
+    currentCleanup = null;
+  }
+
   const hash = location.hash || '#/';
 
   if (hash === '#/' || hash === '') {
@@ -191,7 +256,24 @@ async function render() {
     return;
   }
 
-  const match = hash.match(/^#\/([a-z0-9-]+)$/);
+  if (hash === '#/criar') {
+    renderEditor(null);
+    return;
+  }
+
+  let match = hash.match(/^#\/editar\/([a-z0-9]+)$/);
+  if (match) {
+    renderEditor(match[1]);
+    return;
+  }
+
+  match = hash.match(/^#\/minhas\/([a-z0-9]+)$/);
+  if (match) {
+    renderUserStory(match[1]);
+    return;
+  }
+
+  match = hash.match(/^#\/([a-z0-9-]+)$/);
   if (match) {
     await renderStory(match[1]);
     return;

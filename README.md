@@ -24,7 +24,23 @@ npx serve .
 
 Abra http://localhost:8000.
 
+## Criar minha própria história
+
+Na tela inicial, toque em **Criar minha história**.
+
+1. Digite o título e escreva o texto na aba **Escrever**.
+2. Selecione uma palavra (toque duplo ou arraste) — abre uma bandeja com os sons disponíveis. Toque num som e a palavra vira um chip com o emoji dele.
+3. Prefere tocar? Use a aba **Sonorizar**: um toque numa palavra já a seleciona; arraste para várias palavras de uma vez.
+4. Toque num chip para **trocar**, **ouvir** ou **remover** o som.
+5. Tudo é salvo automaticamente no navegador (localStorage). Use **Ler história** para ver como a criança vai ver, ou **Exportar .md** para baixar o arquivo no mesmo formato das histórias oficiais (basta colocar em `stories/<slug>/index.md` e registrar no `stories/catalog.json`).
+
+A bandeja de sons é montada a partir de `sounds/catalog.json`: ao adicionar um som novo, ele aparece sozinho no editor. Com mais de 12 sons, aparece um campo de busca.
+
 ## Estrutura
+
+- `js/store.js` — armazenamento das histórias do usuário e exportação.
+- `js/editor.js` — editor (seleção de palavras, chips, bandeja de sons).
+- `js/app.js` — rotas, catálogo e leitor.
 
 - `stories/catalog.json` — lista de títulos de histórias disponíveis.
 - `stories/<título>/index.md` — texto com front matter.
@@ -62,7 +78,7 @@ Regras do id: apenas `a-z`, `0-9` e `-`. Sem acentos. O texto exibido pode ter a
 
 1. Grave ou obtenha o áudio, padronize o loudness.
 2. Salve como `sounds/<id>.mp3`.
-3. Registre em `sounds/catalog.json`.
+3. Registre em `sounds/catalog.json`. Campos opcionais usados pelo editor: `"label"` (nome curto exibido) e `"emoji"` (ícone do chip). Sem eles, o nome vem do id e o ícone é 🔊.
 4. Referencie nas histórias como `[texto](id)`.
 
 ## Licenças
